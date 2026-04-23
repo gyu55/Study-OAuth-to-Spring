@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-public class MemberJoinDTO {
+public class MemberDTO {
     private Long id;
     private Long memberId;
     private String memberEmail;

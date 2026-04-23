@@ -1,6 +1,6 @@
 package com.app.oauth.domain.vo;
 
-import com.app.oauth.domain.dto.MemberJoinDTO;
+import com.app.oauth.domain.dto.MemberDTO;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -20,14 +20,14 @@ public class MemberVO {
         this.setMemberNickname("개복치 1단계");
     }
 
-    public static MemberVO from(MemberJoinDTO memberJoinDTO){
+    public static MemberVO from(MemberDTO memberDTO){
         MemberVO memberVO = new MemberVO();
-        memberVO.setMemberEmail(memberJoinDTO.getMemberEmail());
-        memberVO.setMemberPassword(memberJoinDTO.getMemberPassword());
-        memberVO.setMemberPicture(memberJoinDTO.getMemberPicture());
-        memberVO.setMemberName(memberJoinDTO.getMemberName());
-        memberVO.setMemberNickname(memberJoinDTO.getMemberNickname());
-        memberVO.setId(memberJoinDTO.getId());
+        memberVO.setMemberEmail(memberDTO.getMemberEmail());
+        memberVO.setMemberPassword(memberDTO.getMemberPassword());
+        memberVO.setMemberPicture(memberDTO.getMemberPicture() != null ? memberDTO.getMemberPicture() : "/default.jpg");
+        memberVO.setMemberName(memberDTO.getMemberName());
+        memberVO.setMemberNickname(memberDTO.getMemberNickname() != null ? memberDTO.getMemberNickname() : "개복치 1단계");
+        memberVO.setId(memberDTO.getId());
         return memberVO;
     }
 }
