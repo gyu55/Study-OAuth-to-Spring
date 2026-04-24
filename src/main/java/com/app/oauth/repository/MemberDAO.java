@@ -19,7 +19,7 @@ public class MemberDAO {
     }
 
 //    회원 조회(ID)
-    public Optional<MemberVO> findMemberById(Long id){
+    public Optional<MemberDTO> findMemberById(Long id){
         return Optional.ofNullable(memberMapper.select(id));
     }
 

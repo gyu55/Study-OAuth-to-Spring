@@ -10,14 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Slf4j
 public class MemberServiceTests {
-
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private AuthService authService;
 
     @Test
     public void joinTest(){
         MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setMemberEmail("test123@gmail.com");
+        memberDTO.setMemberEmail("test1234@gmail.com");
         memberDTO.setMemberPassword("test123!@#");
         memberDTO.setMemberName("홍길동");
         memberDTO.setMemberNickname("개복치 홍길동");
@@ -32,6 +34,6 @@ public class MemberServiceTests {
         memberDTO.setMemberName("홍길동");
         memberDTO.setMemberNickname("개복치 홍길동");
 
-        log.info("{}", memberService.login(memberDTO));
+        log.info("{}", authService.login(memberDTO));
     }
 }
