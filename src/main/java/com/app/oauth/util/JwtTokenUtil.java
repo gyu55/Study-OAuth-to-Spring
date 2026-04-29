@@ -1,8 +1,10 @@
 package com.app.oauth.util;
 
+import com.app.oauth.exception.JwtTokenException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,12 +22,12 @@ public class JwtTokenUtil {
         String memeberEmail = claims.get("memberEmail");
 
 //        평균 1분 ~ 5분(테스트용으로 24시간)
-//        long expirationTimeInMillis = 1000 * 60 * 60 * 24;
-        long expirationTimeInMillis = 1000L * 10;
+        Long expirationTimeInMillis = 1000L * 60 * 60 * 24;
+//        Long expirationTimeInMillis = 1000L * 10;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTimeInMillis);
 
         // JWT를 발급한 곳
-        claims.put("issuer", "규호띠띠");
+        claims.put("issuer", "gyu5");
         return Jwts
                 .builder()
                 .claims(claims) // claim 추가
@@ -40,11 +42,12 @@ public class JwtTokenUtil {
         String memeberEmail = claims.get("memberEmail");
 
 //        평균 1분 ~ 5분(테스트용으로 24시간)
-        long expirationTimeInMillis = 1000L * 60 * 60 * 24 * 30;
-        Date expirationDate = new Date(System.currentTimeMillis() + expirationTimeInMillis);
+        Long expirationTimeInMillis = 1000L * 60 * 60 * 24 * 30;
+//        Long expirationTimeInMillis = 1000L * 10;
 
+        Date expirationDate = new Date(System.currentTimeMillis() + expirationTimeInMillis);
         // JWT를 발급한 곳
-        claims.put("issuer", "규호띠띠");
+        claims.put("issuer", "gyu5");
         return Jwts
                 .builder()
                 .claims(claims) // claim 추가
@@ -63,15 +66,15 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("만료시간 초과 오류");
+            throw new JwtTokenException("토큰 만료", HttpStatus.UNAUTHORIZED); // 401
         } catch (UnsupportedJwtException e) {
-            throw new RuntimeException(e);
+            throw new JwtTokenException("지원하지 않는 토큰", HttpStatus.BAD_REQUEST); // 400
         } catch (MalformedJwtException e) {
-            throw new RuntimeException(e);
-        } catch (io.jsonwebtoken.security.SecurityException e) {
-            throw new RuntimeException(e);
+            throw new JwtTokenException("잘못된 토큰", HttpStatus.BAD_REQUEST); // 400
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
+            throw new JwtTokenException("토큰이 비어있습니다.", HttpStatus.BAD_REQUEST); // 400
+        } catch (Exception e) {
+            throw new JwtTokenException("알 수 없는 토큰 오류", HttpStatus.BAD_REQUEST); // 400
         }
     }
 //    토큰 유효성 검사

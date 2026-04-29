@@ -13,10 +13,10 @@ public interface MemberMapper {
     public MemberDTO select(Long id);
 
 //    회원 조회(memberEmail)
-    public MemberDTO selectByMemberEmail(String memberEmail);
+    public MemberDTO selectByMemberEmailAndSocialMemberProvider(MemberDTO memberDTO);
 
 //    회원 가입 여부 조회(memberEmail)
-    public boolean existsMemberByMemberEmail(String memberEmail);
+    public boolean existsMemberByMemberEmailAndSocialMemberProvider(MemberDTO memberDTO);
 
 //    회원 정보 수정
     public void update(MemberVO memberVO);

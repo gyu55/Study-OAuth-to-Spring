@@ -16,4 +16,8 @@ public class MemberDTO {
     private String memberNickname;
     private String socialMemberProviderId;
     private String socialMemberProvider;
+
+    {
+        socialMemberProvider = "local";
+    }
 }

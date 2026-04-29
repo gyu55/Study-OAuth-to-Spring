@@ -38,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
         ApiResponseDTO apiResponseDTO = new ApiResponseDTO();
         Map<String, Object> claims = new HashMap<>();
 
-        if(memberDAO.existsMemberByMemberEmail(memberDTO.getMemberEmail())){
+        if(memberDAO.existsMemberByMemberEmailAndSocialMemberProvider(memberDTO)){
             throw new MemberException("중복된 이메일 입니다.", HttpStatus.BAD_REQUEST);
         }
 
