@@ -13,6 +13,7 @@ import com.app.oauth.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = {Exception.class})
-@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberDAO memberDAO;
     private final SocialMemberDAO socialMemberDAO;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtil jwtTokenUtil;
+
+    @Value("${spring.cloud.aws.s3.base-url}")
+    private String s3BaseUrl;
 
     //    회원 가입
     @Override
@@ -66,37 +69,24 @@ public class MemberServiceImpl implements MemberService {
         return apiResponseDTO;
     }
 
-    //  토큰 -> 회원 정보를 조회하는 서비스
+    // 토큰 -> 회원 정보를 조회하는 서비스
     @Override
-    public ApiResponseDTO me(String token) {
-        Claims claims = jwtTokenUtil.parseToken(token);
-        Long id = Long.parseLong(claims.get("id").toString());
-
-        MemberDTO foundMember = memberDAO
-                .findMemberById(id)
-                .orElseThrow(()->{
-                    throw new MemberException("회원 조회 실패", HttpStatus.BAD_REQUEST);
+    public ApiResponseDTO me(Long id) {
+        MemberDTO foundMember = memberDAO.findMemberById(id)
+                .orElseThrow(() -> {
+                    throw new MemberException("me 회원 조회 실패", HttpStatus.BAD_REQUEST);
                 });
 
         MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(foundMember);
         ApiResponseDTO apiResponseDTO = new ApiResponseDTO(true, "회원 조회 성공", memberResponseDTO);
         return apiResponseDTO;
     }
+
+    @Override
+    public ApiResponseDTO updateMemberPicture(MemberVO memberVO) {
+        Map<String, Object> datas = new HashMap<>();
+        memberDAO.updateMemberPicture(memberVO);
+        datas.put("updatedMemberPictureUrl", memberVO.getMemberPicture());
+        return ApiResponseDTO.of(true, "사진 변경 완료", datas);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

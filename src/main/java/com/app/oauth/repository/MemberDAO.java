@@ -28,7 +28,6 @@ public class MemberDAO {
         return Optional.ofNullable(memberMapper.selectByMemberEmailAndSocialMemberProvider(memberDTO));
     }
 
-
 //    회원가입 여부 조회(memberEmail)
     public boolean existsMemberByMemberEmailAndSocialMemberProvider(MemberDTO memberDTO){
         return memberMapper.existsMemberByMemberEmailAndSocialMemberProvider(memberDTO);
@@ -37,6 +36,11 @@ public class MemberDAO {
 //    회원 정보 수정
     public void update(MemberVO memberVO){
         memberMapper.update(memberVO);
+    }
+
+//    회원 썸네일 변경
+    public void updateMemberPicture(MemberVO memberVO){
+        memberMapper.updateMemberPicture(memberVO);
     }
 
 //    회원 삭제

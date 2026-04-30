@@ -14,9 +14,6 @@ public class ApiResponseDTO<T> {
     private String message;
     private T data;
 
-    public ApiResponseDTO(String message){
-        this.message = message;
-    }
     public ApiResponseDTO(String message, T data){
         this.message = message;
         this.data = data;
@@ -26,10 +23,15 @@ public class ApiResponseDTO<T> {
         this.success = success;
     }
 
-    public static <T> ApiResponseDTO<T> of(String message){
-        return new ApiResponseDTO<>(message);
+    public static <T> ApiResponseDTO<T> of(boolean success, String message){
+        return new ApiResponseDTO<>(success, message);
     }
-    public static <T> ApiResponseDTO<T> of(boolean success, String message){ return new ApiResponseDTO<>(success, message); }
-    public static <T> ApiResponseDTO<T> of(String message, T data){ return new ApiResponseDTO<>(message, data); }
 
+    public static <T> ApiResponseDTO<T> of(String message, T data){
+        return new ApiResponseDTO<>(message, data);
+    }
+
+    public static <T> ApiResponseDTO<T> of(boolean success, String message, T data){
+        return new ApiResponseDTO<>(success, message, data);
+    }
 }
